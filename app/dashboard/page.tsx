@@ -1,7 +1,10 @@
 export default function DashboardHomePage(){
     return (
-        <div>
-            <p>Hello world from dashboard</p>
-        </div>
+        <section className="flex flex-grow flex-col">
+            <div className="flex flex-col items-center bg-slate-400">
+                <p className="font-semibold">Dashboard</p>
+            </div>
+            
+        </section>
     )
 }
