@@ -2,6 +2,7 @@ import Link from "next/link"
 
 const sidebarMenus = [
     {menuName: 'Home', urlPath: '/dashboard', icon: ''},
+    {menuName: 'Product', urlPath: '/dashboard/product', icon: ''},
     {menuName: 'Setting', urlPath: '/dashboard', icon: ''},
 ]
 
