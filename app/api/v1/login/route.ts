@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
+import { pool } from "../../../(db_related)/configure_db";
 
-export function GET(){
-    return new NextResponse('Hello')
+export async function GET(){
+    let data = await pool.query("SELECT username FROM credential");
+    return new NextResponse(JSON.stringify(data))
 }
 
-export function POST(){
+export async function POST(){
     return new NextResponse('Post')
 }
