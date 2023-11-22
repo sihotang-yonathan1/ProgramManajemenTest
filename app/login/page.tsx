@@ -21,10 +21,6 @@ export default function LoginPage(){
     }
 
     function handleSubmit(){
-        const redirectPage = (isAuthenticated: boolean) => {
-            redirect('/dashboard')
-        }
-
         const fetchLogin = async () => {
             console.log(process.env.APP_HOST)
             let response = await fetch(
