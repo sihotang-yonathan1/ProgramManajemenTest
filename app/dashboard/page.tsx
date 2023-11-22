@@ -33,6 +33,10 @@ export default function DashboardHomePage(){
             <DashboardSection title="Add product">
                 <div className="flex flex-col items-center">
                     <div className="border p-2">
+                    <div className="flex flex-col">
+                            <label htmlFor="product_id_add" className="capitalize">ID</label>
+                            <input type="text" name="product_id_add" id="product_id_add" className="border rounded p-1"/>
+                        </div>
                         <div className="flex flex-col">
                             <label htmlFor="name" className="capitalize">name</label>
                             <input type="text" name="name" id="name" className="border rounded p-1"/>
