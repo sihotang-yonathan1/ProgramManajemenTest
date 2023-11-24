@@ -22,6 +22,21 @@ export default function ProductPage(){
         }
         fetchProductRequest()
     }, [])
+
+    function handleProductStatus(product_id: number, newStatus: string){
+        const updateProductStatus = async () => {
+            await fetch('http://localhost:3000/api/v1/product_request', {
+                method: "PATCH",
+                credentials: "include",
+                body: JSON.stringify({
+                    'product_id': product_id,
+                    'new_status': newStatus
+                })
+            })
+        }
+        updateProductStatus()
+    }
+
     return (
         <section className="flex flex-grow flex-col">
             <div className="flex flex-col items-center bg-slate-400">
@@ -34,15 +49,16 @@ export default function ProductPage(){
                             <div className="flex flex-row flex-grow mt-1">
                                 <div className="flex flex-col flex-grow ml-2">
                                     <p>Product Name: {value.product_name}</p>
+                                    <p>Quantity: {value.product_quantity}</p>
                                     <p>Issuer: {value.username}</p>
                                 </div>
                                 <div className="flex flex-grow">
                                     <p>Type: {value.type}</p>
                                 </div>
 
-                                <div className="flex flex-col mr-2">
-                                    <button>Accept</button>
-                                    <button>Reject</button>
+                                <div className="flex flex-col mr-2 justify-center">
+                                    <button onClick={() => handleProductStatus(value.product_id, 'accepted')}>Accept</button>
+                                    <button onClick={() => handleProductStatus(value.product_id, 'rejected')}>Reject</button>
                                 </div>
                             </div>
                         </div>
