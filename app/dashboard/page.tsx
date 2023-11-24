@@ -48,6 +48,7 @@ export default function DashboardHomePage(){
     }, [])
 
     function handleAddProductRequest(){
+        // TODO: change user based on current user
         const user = 'user'
         const requestAddProduct = async () => {
             await fetch('http://localhost:3000/api/v1/product_request', {
@@ -58,6 +59,25 @@ export default function DashboardHomePage(){
                     'product_name': addProductInfo.name,
                     'product_quantity': addProductInfo.quantity,
                     'type': 'add',
+                    'username': user
+                })
+            })
+        }
+        requestAddProduct()
+    }
+
+    function handleDeleteProductRequest(product_id: number, product_name: string, quantity: number){
+        // TODO: change user based on current user
+        const user = 'user'
+        const requestAddProduct = async () => {
+            await fetch('http://localhost:3000/api/v1/product_request', {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify({
+                    'product_id': product_id,
+                    'product_name': product_name,
+                    'product_quantity': quantity,
+                    'type': 'delete',
                     'username': user
                 })
             })
@@ -79,7 +99,15 @@ export default function DashboardHomePage(){
                     {productData.map((value, index) => {
                         return (
                             <div key={index} className="mx-1 px-1">
-                                <p className="capitalize">{value.name}</p>
+                                <div className="border p-2">
+                                    <p className="capitalize font-semibold">{value.name}</p>
+                                    <div>
+                                        <p>Quantity: {value.quantity}</p>
+                                    </div>
+                                    <div className="flex flex-col items-center mt-1">
+                                        <button className="bg-red-400 p-1" onClick={() => handleDeleteProductRequest(value.id, value.name, value.quantity)}>Delete</button>
+                                    </div>
+                                </div>
                             </div>
                         )
                     })}
