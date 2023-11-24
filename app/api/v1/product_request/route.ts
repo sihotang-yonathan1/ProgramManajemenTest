@@ -27,3 +27,15 @@ export async function POST(request: NextRequest){
         'message': 'data successfully requested'
     }))
 }
+
+export async function PATCH(request: NextRequest){
+    let request_data = await request.json()
+
+    await pool.query(`
+        UPDATE product_request_queue SET status = ? WHERE product_id = ?
+    `, [request_data['new_status'], request_data['product_id']])
+
+    return new NextResponse(JSON.stringify({
+        'message': 'Data updated successfully'
+    }))
+}
