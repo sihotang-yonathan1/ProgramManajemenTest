@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 function DashboardSection({title, children}:{title: string, children: React.ReactNode}){
     return (
@@ -13,8 +13,27 @@ function DashboardSection({title, children}:{title: string, children: React.Reac
     )
 }
 
+type ProductDataType = {
+    'id': number,
+    'name': string,
+    'quantity': number
+}
+
 export default function DashboardHomePage(){
     const [isAddDialogVisible, setAddDialogVisible] = useState(false)
+    const [productData, setProductData] = useState<Array<ProductDataType>>([])
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            let response = await fetch(`http://localhost:3000/api/v1/product`)
+            if (response.ok){
+                let data = await response.json()
+                setProductData(data)
+            }
+        }
+        fetchProduct()
+    }, [])
+
     return (
         <section className="flex flex-grow flex-col">
             <div className="flex flex-col items-center bg-slate-400">
@@ -25,21 +44,17 @@ export default function DashboardHomePage(){
                 <div className="flex flex-col">
                     <p className="font-semibold">Product List</p>
                 </div>
+                <div className="overflow-x-auto flex">
+                    {productData.map((value, index) => {
+                        return (
+                            <div key={index} className="mx-1 px-1">
+                                <p className="capitalize">{value.name}</p>
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
 
-            <DashboardSection title="Product">
-                <div className="flex">
-                    <div className="p-2">
-                        <button>Add</button>
-                    </div>
-                    <div className="p-2">
-                        <button>Search</button>
-                    </div>
-                    <div className="p-2">
-                        <button>Delete</button>
-                    </div>
-                </div>
-            </DashboardSection>
             { isAddDialogVisible && <div>
                 <DashboardSection title="Add product">
                     <div className="flex flex-col items-center">
