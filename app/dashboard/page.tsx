@@ -1,3 +1,7 @@
+'use client'
+
+import { useState } from "react"
+
 function DashboardSection({title, children}:{title: string, children: React.ReactNode}){
     return (
         <div className="flex flex-col">
@@ -10,10 +14,17 @@ function DashboardSection({title, children}:{title: string, children: React.Reac
 }
 
 export default function DashboardHomePage(){
+    const [isAddDialogVisible, setAddDialogVisible] = useState(false)
     return (
         <section className="flex flex-grow flex-col">
             <div className="flex flex-col items-center bg-slate-400">
                 <p className="font-semibold text-lg">Dashboard</p>
+            </div>
+
+            <div className="flex flex-col items-center">
+                <div className="flex flex-col">
+                    <p className="font-semibold">Product List</p>
+                </div>
             </div>
 
             <DashboardSection title="Product">
@@ -29,56 +40,40 @@ export default function DashboardHomePage(){
                     </div>
                 </div>
             </DashboardSection>
-
-            <DashboardSection title="Add product">
-                <div className="flex flex-col items-center">
-                    <div className="border p-2">
-                    <div className="flex flex-col">
-                            <label htmlFor="product_id_add" className="capitalize">ID</label>
-                            <input type="text" name="product_id_add" id="product_id_add" className="border rounded p-1"/>
-                        </div>
+            { isAddDialogVisible && <div>
+                <DashboardSection title="Add product">
+                    <div className="flex flex-col items-center">
+                        <div className="border p-2">
                         <div className="flex flex-col">
-                            <label htmlFor="name" className="capitalize">name</label>
-                            <input type="text" name="name" id="name" className="border rounded p-1"/>
-                        </div>
-                        <div className="flex flex-col">
-                            <label htmlFor="quantity" className="capitalize">quantity</label>
-                            <input type="number" name="quantity" id="quantity" className="border rounded p-1"/>
-                        </div>
+                                <label htmlFor="product_id_add" className="capitalize">ID</label>
+                                <input type="text" name="product_id_add" id="product_id_add" className="border rounded p-1"/>
+                            </div>
+                            <div className="flex flex-col">
+                                <label htmlFor="name" className="capitalize">name</label>
+                                <input type="text" name="name" id="name" className="border rounded p-1"/>
+                            </div>
+                            <div className="flex flex-col">
+                                <label htmlFor="quantity" className="capitalize">quantity</label>
+                                <input type="number" name="quantity" id="quantity" className="border rounded p-1"/>
+                            </div>
 
-                        <div className="flex justify-evenly my-1">
-                            <button className="bg-green-300 p-1 rounded">Add</button>
-                            <button className="bg-red-500 p-1 rounded">Cancel</button>
+                            <div className="flex justify-evenly my-1">
+                                <button className="bg-green-300 p-1 rounded" onClick={() => {
+                                    setAddDialogVisible(false)
+                                }}>Add</button>
+                                <button className="bg-red-500 p-1 rounded" onClick={() => {
+                                    setAddDialogVisible(false)
+                                }}>Cancel</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </DashboardSection>
+                </DashboardSection>
+            </div>}
 
-            <DashboardSection title="Search Product">
-                <div className="flex flex-col justify-center items-center">
-                    <div className="border p-2">
-                        <div className="flex flex-col">
-                            <label htmlFor="search">Search</label>
-                            <input type="text" name="search" id="search" className="border rounded"/>
-                        </div>
-                    </div>
-                </div>
-            </DashboardSection>
-
-            <DashboardSection title="Delete product">
-                <div className="flex flex-col justify-center items-center">
-                    <div className="border p-2">
-                        <div className="flex flex-col">
-                            <label htmlFor="delete_product" className="uppercase">id</label>
-                            <input type="text" name="delete_product" id="delete_product" className="border rounded p-1"/>
-                        </div>
-                        <div className="flex justify-evenly py-2">
-                            <button className="bg-green-400 p-2">Delete</button>
-                            <button className="bg-red-500 p-2">Cancel</button>
-                        </div>
-                    </div>
-                </div>
-            </DashboardSection>
+            <div className="absolute bottom-0 right-0 m-2 bg-sky-400 py-1 px-2 rounded">
+                {/* TODO: change + to icon */}
+                <button onClick={() => setAddDialogVisible(true)}>+</button>
+            </div>
         </section>
     )
 }
