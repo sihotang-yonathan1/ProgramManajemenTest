@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "../../../(db_related)/configure_db";
 
+// TODO: check authorization and authentication
+export async function GET(){
+    let result = await pool.query(`
+        SELECT 
+            product_id, product_name, product_quantity, username, type 
+        FROM product_request_queue WHERE status = ?`, ['pending']) ?? []
+    return new NextResponse(JSON.stringify(result))
+}
+
 export async function POST(request: NextRequest){
     let request_data = await request.json()
 
-    let query = pool.query(`
+    let query = await pool.query(`
         INSERT INTO product_request_queue 
         (product_id, product_name, product_quantity, username, type)
         VALUES (?, ?, ?, ?, ?)`, [
