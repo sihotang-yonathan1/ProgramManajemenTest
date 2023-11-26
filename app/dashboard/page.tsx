@@ -101,8 +101,8 @@ export default function DashboardHomePage(){
                             <div key={index} className="mx-1 px-1">
                                 <div className="border p-2">
                                     <p className="capitalize font-semibold">{value.name}</p>
-                                    <div>
-                                        <p>Quantity: {value.quantity}</p>
+                                    <div className="flex flex-col items-center">
+                                        <p>{value.quantity} {value.quantity > 1 ? 'items': 'item'}</p>
                                     </div>
                                     <div className="flex flex-col items-center mt-1">
                                         <button className="bg-red-400 p-2" onClick={() => handleDeleteProductRequest(value.id, value.name, value.quantity)}>Delete</button>
