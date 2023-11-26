@@ -2,8 +2,23 @@
 import { redirect} from "next/navigation";
 import { useState, useEffect} from "react";
 
+type ErrorInfoType = {
+    'isError': boolean,
+    'error': {
+        'http_code': number,
+        'http_message': string,
+    }
+}
+
 export default function LoginPage(){
     const [loginInfo, setLoginInfo] = useState({})
+    const [errorInfo, setErrorInfo] = useState<ErrorInfoType>({
+        'isError': false,
+        'error': {
+            'http_code': 200,
+            'http_message': 'Ok'
+        }
+    })
     const [isAuthenticated, setAuthenticated] = useState(false)
 
     useEffect(() => {
@@ -37,6 +52,12 @@ export default function LoginPage(){
                     setAuthenticated(true)
                 }
             }
+            else {
+                setErrorInfo(prev => ({...prev, "error": {
+                    "http_code":  response.status,
+                    "http_message": response.statusText
+                }, 'isError': true}))
+            }
         }
         fetchLogin()
     }
@@ -59,6 +80,11 @@ export default function LoginPage(){
                 <div className="flex flex-col items-center">
                     <button type="button" className="bg-sky-400 p-2 rounded text-white" onClick={handleSubmit}>Login</button>
                 </div>
+                {errorInfo.isError && 
+                <div className="flex flex-col items-center bg-red-500 text-white my-2">
+                    <p>Error Occured</p>
+                    <p>{errorInfo.error.http_code}: {errorInfo.error.http_message}</p>
+                </div>}
             </div>
         </div>
     )
