@@ -50,18 +50,25 @@ export default function ProductPage(){
                     return (
                         <div key={index}>
                             <div className="flex flex-row flex-grow mt-1">
-                                <div className="flex flex-col flex-grow ml-2">
+                                <div className="flex flex-col ml-2 px-2">
                                     <p>Product Name: {value.product_name}</p>
                                     <p>Quantity: {value.product_quantity}</p>
                                     <p>Issuer: {value.username}</p>
                                 </div>
-                                <div className="flex flex-grow">
-                                    <p>Type: {value.type}</p>
+                                <div className="flex flex-grow items-center mx-2 justify-center">
+                                    <div className="flex flex-col items-center justify-center">
+                                        <p>Operation Type</p>
+                                        <p className="uppercase">{value.type}</p>
+                                    </div>
                                 </div>
 
                                 <div className="flex flex-col mr-2 justify-center">
-                                    <button onClick={() => handleProductStatus(value.product_id, 'accepted')}>Accept</button>
-                                    <button onClick={() => handleProductStatus(value.product_id, 'rejected')}>Reject</button>
+                                    <div className="flex-col flex m-1">
+                                        <button className="bg-green-300 p-2" onClick={() => handleProductStatus(value.product_id, 'accepted')}>Accept</button>
+                                    </div>
+                                    <div className="flex-col flex m-1">
+                                        <button className="bg-red-500 p-2" onClick={() => handleProductStatus(value.product_id, 'rejected')}>Reject</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
