@@ -42,6 +42,9 @@ export default function ProductPage(){
             <div className="flex flex-col items-center bg-slate-400">
                 <p className="font-semibold">Product</p>
             </div>
+            <div className="flex flex-col items-center">
+                <h3 className="font-semibold">Product Request</h3>
+            </div>
             <div className="overflow-x-auto">
                 {productRequestData.map((value, index) => {
                     return (
