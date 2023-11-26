@@ -117,11 +117,14 @@ export default function DashboardHomePage(){
                 </div>
             </div>
 
-            { isAddDialogVisible && <div>
-                <DashboardSection title="Add product">
+            { isAddDialogVisible && <div className="pt-1">
+                <DashboardSection title="">
                     <div className="flex flex-col items-center">
                         <div className="border p-2">
-                        <div className="flex flex-col">
+                            <div className="flex flex-col items-center">
+                                <h3 className="font-semibold">Add Product</h3>
+                            </div>
+                            <div className="flex flex-col">
                                 <label htmlFor="product_id_add" className="capitalize">ID</label>
                                 <input type="text" name="product_id_add" id="product_id_add" className="border rounded p-1" 
                                     onChange={(event) => setAddProductInfo({
