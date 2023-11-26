@@ -110,6 +110,9 @@ export default function DashboardHomePage(){
                                     <div className="flex flex-col items-center mt-1">
                                         <button className="bg-yellow-300 p-1" onClick={() => console.log("Feature to update not added yet")}>Update</button>
                                     </div>
+                                    <div className="flex flex-col items-center mt-1">
+                                        <button className="bg-green-300 p-1">Buy</button>
+                                    </div>
                                 </div>
                             </div>
                         )
