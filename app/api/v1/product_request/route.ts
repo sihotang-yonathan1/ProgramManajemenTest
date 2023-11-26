@@ -13,7 +13,8 @@ export async function GET(){
 export async function POST(request: NextRequest){
     let request_data = await request.json()
 
-    let query = await pool.query(`
+    await pool.query(`CALL delete_non_pending_request()`)
+    await pool.query(`
         INSERT INTO product_request_queue 
         (product_id, product_name, product_quantity, username, type)
         VALUES (?, ?, ?, ?, ?)`, [
