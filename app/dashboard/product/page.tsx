@@ -13,13 +13,14 @@ type ProductDataRequestType = {
 export default function ProductPage(){
     const [productRequestData, setProductRequestData] = useState<Array<ProductDataRequestType>>([])
     
-    useEffect(() => {
-        const fetchProductRequest = async () => {
-            let response = await fetch('http://localhost:3000/api/v1/product_request')
-            if (response.ok){
-                setProductRequestData(await response.json())
-            }
+    const fetchProductRequest = async () => {
+        let response = await fetch('http://localhost:3000/api/v1/product_request')
+        if (response.ok){
+            setProductRequestData(await response.json())
         }
+    }
+
+    useEffect(() => {
         fetchProductRequest()
     }, [])
 
@@ -33,8 +34,10 @@ export default function ProductPage(){
                     'new_status': newStatus
                 })
             })
+            fetchProductRequest()
         }
         updateProductStatus()
+        
     }
 
     return (
