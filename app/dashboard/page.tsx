@@ -105,7 +105,10 @@ export default function DashboardHomePage(){
                                         <p>Quantity: {value.quantity}</p>
                                     </div>
                                     <div className="flex flex-col items-center mt-1">
-                                        <button className="bg-red-400 p-1" onClick={() => handleDeleteProductRequest(value.id, value.name, value.quantity)}>Delete</button>
+                                        <button className="bg-red-400 p-2" onClick={() => handleDeleteProductRequest(value.id, value.name, value.quantity)}>Delete</button>
+                                    </div>
+                                    <div className="flex flex-col items-center mt-1">
+                                        <button className="bg-yellow-300 p-1" onClick={() => console.log("Feature to update not added yet")}>Update</button>
                                     </div>
                                 </div>
                             </div>
