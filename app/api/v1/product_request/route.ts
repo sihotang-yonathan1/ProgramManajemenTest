@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool, prisma} from "../../../(db_related)/configure_db";
-import { getPendingProductRequest } from "./product";
+import { getPendingProductRequest, updateProductRequest } from "./product";
 
 // TODO: check authorization and authentication
 export async function GET(){
@@ -34,9 +34,9 @@ export async function POST(request: NextRequest){
 export async function PATCH(request: NextRequest){
     let request_data = await request.json()
 
-    await prisma.$connect()
-    await prisma.$executeRaw`UPDATE product_request_queue SET status = ${request_data['new_status']} WHERE product_id = ${request_data['product_id']}`
-    await prisma.$disconnect()
+    await updateProductRequest(
+        request_data['product_id'], request_data['new_status'], 
+        request_data['username'])
     
     return new NextResponse(JSON.stringify({
         'message': 'Data updated successfully'

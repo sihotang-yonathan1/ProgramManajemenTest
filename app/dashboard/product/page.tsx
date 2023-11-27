@@ -1,6 +1,6 @@
 'use client'
 
-import { getPendingProductRequest } from "../../api/v1/product_request/product"
+import { getPendingProductRequest, updateProductRequest } from "../../api/v1/product_request/product"
 import { useEffect, useState } from "react"
 
 
@@ -11,6 +11,9 @@ type ProductRequest = {
     username: string;
     type: string;
 }
+
+
+type ProductRequestStatus = 'pending' | 'accepted' | 'rejected'
 
 export default function ProductPage(){
     const [productRequestData, setProductRequestData] = useState<ProductRequest[]>([])
@@ -26,16 +29,9 @@ export default function ProductPage(){
         fetchProductRequest()
     }, [])
 
-    function handleProductStatus(product_id: number, newStatus: string){
+    function handleProductStatus(product_id: number, newStatus: ProductRequestStatus){
         const updateProductStatus = async () => {
-            await fetch('http://localhost:3000/api/v1/product_request', {
-                method: "PATCH",
-                credentials: "include",
-                body: JSON.stringify({
-                    'product_id': product_id,
-                    'new_status': newStatus
-                })
-            })
+            await updateProductRequest(product_id, newStatus, 'user')
             fetchProductRequest()
         }
         updateProductStatus()

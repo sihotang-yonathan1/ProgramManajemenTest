@@ -19,3 +19,19 @@ export async function getPendingProductRequest(){
     await prisma.$disconnect()
     return result
 }
+
+type ProductRequestStatus = 'pending' | 'accepted' | 'rejected'
+
+export async function updateProductRequest(productId: number, newStatus: ProductRequestStatus, username: string){
+    await prisma.$connect()
+    await prisma.$executeRaw`
+        UPDATE product_request_queue 
+            SET status = ${newStatus} 
+        WHERE 
+            product_id = ${productId} AND username = ${username}`
+    await prisma.$disconnect()
+    
+    return {
+        success: true
+    }
+}
