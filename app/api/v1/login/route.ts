@@ -43,6 +43,7 @@ export async function POST(request: NextRequest){
             if (data.length == 0){
                 throw new InvalidLoginException('Invalid username or password')
             }
+            await prisma.$disconnect()
             return new NextResponse(JSON.stringify(data))
     } catch (error) {
         let data;
