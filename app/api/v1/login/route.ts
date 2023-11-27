@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient()
+import {prisma} from "../../../(db_related)/configure_db";
 
 class InvalidLoginException extends Error {
     constructor(message: string){
@@ -14,6 +12,7 @@ class InvalidLoginException extends Error {
 export async function GET(){
     let data;
     try {
+        await prisma.$connect()
         data = await prisma.credential.findMany({
             select: {
                 username: true
@@ -31,6 +30,7 @@ export async function POST(request: NextRequest){
 
     // TODO: set HTTP 403 when username or password invalid
     try {
+        await prisma.$connect()
         let data = await prisma.credential.findMany({
             select: {
                 username: true
