@@ -39,7 +39,7 @@ export default function LoginPage(){
         const fetchLogin = async () => {
             console.log(process.env.APP_HOST)
             let response = await fetch(
-                `http://localhost:3000/api/v1/login`, {
+                `http://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/v1/login`, {
                     method: "POST",
                     body: JSON.stringify(loginInfo),
                     credentials: "include" // need to set because CORS
