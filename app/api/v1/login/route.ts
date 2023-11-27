@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { pool } from "../../../(db_related)/configure_db";
-import { SqlError } from "mariadb";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient()
 
 class InvalidLoginException extends Error {
     constructor(message: string){
@@ -11,7 +12,11 @@ class InvalidLoginException extends Error {
 }
 
 export async function GET(){
-    let data = await pool.query("SELECT username FROM credential");
+    let data = await prisma.credential.findMany({
+        select: {
+            username: true
+        }
+    })
     return new NextResponse(JSON.stringify(data))
 }
 
@@ -20,9 +25,15 @@ export async function POST(request: NextRequest){
 
     // TODO: set HTTP 403 when username or password invalid
     try {
-        let data: Array<Map<string, string>> = await pool.query(
-            "SELECT username FROM credential WHERE username = ? AND password = ?", 
-            [request_json['username'], request_json['password']]) ?? []
+        let data = await prisma.credential.findMany({
+            select: {
+                username: true
+            },
+            where: {
+                username: request_json['username'],
+                password: request_json['password']
+            }} ?? []
+        )
             if (data.length == 0){
                 throw new InvalidLoginException('Invalid username or password')
             }
@@ -32,17 +43,11 @@ export async function POST(request: NextRequest){
         let response_status = {
             'http_code': 403
         }
-        if (error instanceof SqlError){
-            data = {
-                'success': false, 
-                'error_data': {
-                    'sql_state': error.sqlState,
-                    'isFatal': error.fatal,
-                    'error_number': error.errno
-                },
-                'error_type': error.name
-        }}
-        else if (error instanceof InvalidLoginException){
+        
+        console.error(error)
+        await prisma.$disconnect()
+
+        if (error instanceof InvalidLoginException){
             data = {
                 'success': false, 
                 'error_data': {
