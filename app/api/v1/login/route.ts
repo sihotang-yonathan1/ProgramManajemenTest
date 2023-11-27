@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import {prisma} from "../../../(db_related)/configure_db";
+import { sendLoginInfo } from "./check_credential";
 
 class InvalidLoginException extends Error {
     constructor(message: string){
@@ -14,21 +15,8 @@ export async function POST(request: NextRequest){
 
     // TODO: set HTTP 403 when username or password invalid
     try {
-        await prisma.$connect()
-        let data = await prisma.credential.findMany({
-            select: {
-                username: true
-            },
-            where: {
-                username: request_json['username'],
-                password: request_json['password']
-            }} ?? []
-        )
-            if (data.length == 0){
-                throw new InvalidLoginException('Invalid username or password')
-            }
-            await prisma.$disconnect()
-            return new NextResponse(JSON.stringify(data))
+        let data = sendLoginInfo(request_json['username'], request_json['password'])
+        return new NextResponse(JSON.stringify(data));
     } catch (error) {
         let data;
         let response_status = {

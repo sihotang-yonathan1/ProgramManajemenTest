@@ -1,6 +1,7 @@
 "use client"
 import { redirect} from "next/navigation";
 import { useState, useEffect} from "react";
+import { sendLoginInfo } from "../api/v1/login/check_credential";
 
 type ErrorInfoType = {
     'isError': boolean,
@@ -10,8 +11,16 @@ type ErrorInfoType = {
     }
 }
 
+type LoginInfo = {
+    'username': string, 
+    'password': string
+}
+
 export default function LoginPage(){
-    const [loginInfo, setLoginInfo] = useState({})
+    const [loginInfo, setLoginInfo] = useState<LoginInfo>({
+        username: '',
+        password: ''
+    })
     const [errorInfo, setErrorInfo] = useState<ErrorInfoType>({
         'isError': false,
         'error': {
@@ -37,26 +46,19 @@ export default function LoginPage(){
 
     function handleSubmit(){
         const fetchLogin = async () => {
-            console.log(process.env.APP_HOST)
-            let response = await fetch(
-                `http://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/v1/login`, {
-                    method: "POST",
-                    body: JSON.stringify(loginInfo),
-                    credentials: "include" // need to set because CORS
-                })
-            if (response.ok){
-                // TODO: set cookie to not back 
-                // again to login page if cookie is valid
-                let data = await response.json() ?? []
-                if (data?.length !== 0){
-                    setAuthenticated(true)
-                }
+            let data = await sendLoginInfo(loginInfo['username'], loginInfo['password'])
+            if (data == null){
+                setErrorInfo(prev => ({
+                    ...prev, 
+                    isError: true,
+                    error: {
+                        http_code: 403,
+                        http_message: 'Invalid Login'
+                    }
+                }))
             }
             else {
-                setErrorInfo(prev => ({...prev, "error": {
-                    "http_code":  response.status,
-                    "http_message": response.statusText
-                }, 'isError': true}))
+                setAuthenticated(true)
             }
         }
         fetchLogin()
