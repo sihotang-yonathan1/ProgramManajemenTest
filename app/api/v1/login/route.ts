@@ -12,11 +12,17 @@ class InvalidLoginException extends Error {
 }
 
 export async function GET(){
-    let data = await prisma.credential.findMany({
-        select: {
-            username: true
-        }
-    })
+    let data;
+    try {
+        data = await prisma.credential.findMany({
+            select: {
+                username: true
+            }
+        })
+    }
+    finally {
+        await prisma.$disconnect()
+    }
     return new NextResponse(JSON.stringify(data))
 }
 
