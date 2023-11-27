@@ -1,22 +1,24 @@
 'use client'
 
+import { getPendingProductRequest } from "../../api/v1/product_request/product"
 import { useEffect, useState } from "react"
 
-type ProductDataRequestType = {
-    'product_id': number,
-    'product_name': string,
-    'product_quantity': number,
-    'type': 'add' | 'delete' | 'update',
-    'username': string
+
+type ProductRequest = {
+    product_id: number;
+    product_name: string | null;
+    product_quantity: number | null;
+    username: string;
+    type: string;
 }
 
 export default function ProductPage(){
-    const [productRequestData, setProductRequestData] = useState<Array<ProductDataRequestType>>([])
+    const [productRequestData, setProductRequestData] = useState<ProductRequest[]>([])
     
     const fetchProductRequest = async () => {
-        let response = await fetch('http://localhost:3000/api/v1/product_request')
-        if (response.ok){
-            setProductRequestData(await response.json())
+        let response = await getPendingProductRequest()
+        if (response.length > 0){
+            setProductRequestData(response)
         }
     }
 

@@ -1,22 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool, prisma} from "../../../(db_related)/configure_db";
+import { getPendingProductRequest } from "./product";
 
 // TODO: check authorization and authentication
 export async function GET(){
-    await prisma.$connect()
-    let result = await prisma.product_request_queue.findMany({
-        select: {
-            product_id: true,
-            product_name: true,
-            product_quantity: true,
-            username: true,
-            type: true
-        },
-        where: {
-            status: 'pending'
-        }
-    })
-    await prisma.$disconnect()
+    let result = await getPendingProductRequest()
     return new NextResponse(JSON.stringify(result))
 }
 
