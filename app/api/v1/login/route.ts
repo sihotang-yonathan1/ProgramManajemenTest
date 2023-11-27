@@ -9,22 +9,6 @@ class InvalidLoginException extends Error {
     }
 }
 
-// export async function GET(){
-//     let data;
-//     try {
-//         await prisma.$connect()
-//         data = await prisma.credential.findMany({
-//             select: {
-//                 username: true
-//             }
-//         })
-//     }
-//     finally {
-//         await prisma.$disconnect()
-//     }
-//     return new NextResponse(JSON.stringify(data))
-// }
-
 export async function POST(request: NextRequest){
     let request_json = await request.json()
 
