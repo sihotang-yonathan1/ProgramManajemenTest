@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { pool } from "../../../(db_related)/configure_db";
+import { pool, prisma} from "../../../(db_related)/configure_db";
 
 // TODO: check authorization and authentication
 export async function GET(){
@@ -13,17 +13,21 @@ export async function GET(){
 export async function POST(request: NextRequest){
     let request_data = await request.json()
 
-    await pool.query(`CALL delete_non_pending_request()`)
-    await pool.query(`
-        INSERT INTO product_request_queue 
-        (product_id, product_name, product_quantity, username, type)
-        VALUES (?, ?, ?, ?, ?)`, [
-            request_data['product_id'],
-            request_data['product_name'],
-            request_data['product_quantity'],
-            request_data['username'],
-            request_data['type']
-        ])
+    await prisma.$connect()
+    
+    await prisma.$executeRaw`DELETE FROM product_request_queue WHERE status != 'pending'`
+    await prisma.product_request_queue.create({
+        data: {
+            product_id: request_data['product_id'],
+            product_name: request_data['product_name'],
+            product_quantity: request_data['product_quantity'],
+            username: request_data['username'],
+            type: request_data['type']
+        }
+    })
+
+    await prisma.$disconnect()
+    
     return new NextResponse(JSON.stringify({
         'message': 'data successfully requested'
     }))
